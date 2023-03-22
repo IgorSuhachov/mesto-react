@@ -27,7 +27,7 @@ function Main({ onEditAvatarPopup, onProfilePopup, onEditPopup, onCardClick }) {
 			.catch((err) => {
 				console.log(err)
 			})
-	})
+	}, [])
 
 	return (
 		<main>
