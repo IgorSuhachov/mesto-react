@@ -14,7 +14,7 @@
   </p>
 </p>
 
-![Contributors](https://img.shields.io/github/contributors/IgorSuhachov/mesto?color=dark-green) 
+![Contributors](https://img.shields.io/github/contributors/IgorSuhachov/mesto-react?color=dark-green) 
 
 ## О проекте
 
