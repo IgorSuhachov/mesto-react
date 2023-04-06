@@ -1,38 +1,14 @@
 import Card from './Card'
-import Api from '../utils/api'
-import { useEffect, useState } from 'react'
+import React from 'react'
+import CurrentUserContext from '../contexts/CurrentUserContext'
 
-function Main({ onEditAvatarPopup, onProfilePopup, onEditPopup, onCardClick }) {
-	const api = new Api({
-		baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-60',
-		headers: {
-			authorization: 'deae41f5-41fa-4007-af22-3906d8bef3ad',
-			'Content-Type': 'application/json',
-		},
-	})
-
-	const [userName, setUserName] = useState('')
-	const [userDescription, setUserDescription] = useState('')
-	const [userAvatar, setUserAvatar] = useState('')
-	const [cards, setCards] = useState([])
-
-	useEffect(() => {
-		Promise.all([api.getUserInfo(), api.getInitialsCards()])
-			.then(([data, item]) => {
-				setUserName(data.name)
-				setUserDescription(data.about)
-				setUserAvatar(data.avatar)
-				setCards(item)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}, [])
+function Main({ cards, onEditAvatarPopup, onProfilePopup, onEditPopup, onCardClick, onCardLike, onCardDelete }) {
+	const currentUser = React.useContext(CurrentUserContext)
 
 	return (
 		<main>
 			<section className="profile">
-				<img alt="аватар" className="profile__avatar" src={userAvatar} />
+				<img alt="аватар" className="profile__avatar" src={currentUser.avatar} />
 				<button
 					className="profile__edit-avatar"
 					type="button"
@@ -42,7 +18,7 @@ function Main({ onEditAvatarPopup, onProfilePopup, onEditPopup, onCardClick }) {
 				></button>
 				<div className="profile__info">
 					<div className="profile__container">
-						<h1 className="profile__name">{userName}</h1>
+						<h1 className="profile__name">{currentUser.name}</h1>
 						<button
 							className="profile__edit"
 							type="button"
@@ -51,7 +27,7 @@ function Main({ onEditAvatarPopup, onProfilePopup, onEditPopup, onCardClick }) {
 							}}
 						></button>
 					</div>
-					<p className="profile__description">{userDescription}</p>
+					<p className="profile__description">{currentUser.about}</p>
 				</div>
 				<button
 					className="profile__add"
@@ -61,11 +37,16 @@ function Main({ onEditAvatarPopup, onProfilePopup, onEditPopup, onCardClick }) {
 					}}
 				></button>
 			</section>
-
 			<section className="elements">
-				{cards.map((card) => {
-					return <Card key={card._id} name={card.name} link={card.link} likes={card.likes} onCardClick={onCardClick} />
-				})}
+				{cards.map((card) => (
+					<Card
+						key={card._id}
+						card={card}
+						onCardClick={onCardClick}
+						onCardLike={onCardLike}
+						onCardDelete={onCardDelete}
+					/>
+				))}
 			</section>
 		</main>
 	)

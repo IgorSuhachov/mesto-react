@@ -75,4 +75,8 @@ export default class Api {
 			headers: this._headers,
 		}).then(this._checkResponse)
 	}
+
+	changeLikeCardStatus(cardId, isLiked) {
+		return isLiked ? this.deleteLike(cardId) : this.setLike(cardId)
+	}
 }
