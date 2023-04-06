@@ -32,6 +32,7 @@
 * HTML
 * CSS
 * JavaScript
+* React
 * Webpack
 
 <b>Методология</b>
