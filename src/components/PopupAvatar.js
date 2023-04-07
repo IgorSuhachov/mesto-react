@@ -1,8 +1,24 @@
 import PopupWithForm from './PopupWithForm'
+import React from 'react'
 
-function PopupAvatar({ isOpen, onClose }) {
+function PopupAvatar({ isOpen, onClose, onUpdateAvatar }) {
+	const ref = React.useRef()
+
+	function handleSubmit(e) {
+		e.preventDefault()
+		onUpdateAvatar({
+			avatar: ref.current.value,
+		})
+	}
+
 	return (
-		<PopupWithForm name={'avatarForm'} title={'Обновить аватар'} isOpen={isOpen} onClose={onClose}>
+		<PopupWithForm
+			name={'avatarForm'}
+			title={'Обновить аватар'}
+			isOpen={isOpen}
+			onClose={onClose}
+			onSubmit={handleSubmit}
+		>
 			<input
 				type="url"
 				placeholder={'Ссылка на картинку'}
@@ -10,6 +26,7 @@ function PopupAvatar({ isOpen, onClose }) {
 				name="avatar"
 				id="avatarImage"
 				required
+				ref={ref}
 			/>
 			<span className="popup__error avatarImage-error" />
 		</PopupWithForm>
