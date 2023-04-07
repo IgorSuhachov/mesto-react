@@ -14,7 +14,7 @@ function App() {
 	const [isAddPlacePopup, setAddPlacePopup] = React.useState(false)
 	const [isEditAvatarPopup, setEditAvatarPopup] = React.useState(false)
 	const [selectedCard, setSelectedCard] = React.useState({})
-	const [currentUser, setCurrentUser] = React.useState([])
+	const [currentUser, setCurrentUser] = React.useState({})
 	const [cards, setCards] = React.useState([])
 
 	const api = new Api({
@@ -60,6 +60,16 @@ function App() {
 			.catch((err) => console.log(err))
 	}
 
+	function handleUpdateUser(data) {
+		api
+			.setUserInfo(data)
+			.then((data) => {
+				setCurrentUser(data)
+				closeAllPopups()
+			})
+			.catch((err) => console.log(err))
+	}
+
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<div className="root">
@@ -75,7 +85,7 @@ function App() {
 						onCardDelete={handleCardDelete}
 					/>
 					<Footer />
-					<PopupProfile isOpen={isEditProfilePopup} onClose={closeAllPopups} />
+					<PopupProfile isOpen={isEditProfilePopup} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
 					<PopupEdit isOpen={isAddPlacePopup} onClose={closeAllPopups} />
 					<PopupAvatar isOpen={isEditAvatarPopup} onClose={closeAllPopups} />
 					<ImagePopup card={selectedCard} onClose={closeAllPopups} />
