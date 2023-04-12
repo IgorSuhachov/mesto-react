@@ -80,3 +80,11 @@ export default class Api {
 		return isLiked ? this.deleteLike(cardId) : this.setLike(cardId)
 	}
 }
+
+export const api = new Api({
+	baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-60',
+	headers: {
+		authorization: 'deae41f5-41fa-4007-af22-3906d8bef3ad',
+		'Content-Type': 'application/json',
+	},
+})

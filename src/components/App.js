@@ -7,23 +7,15 @@ import PopupEdit from './PopupAddPlace'
 import PopupAvatar from './PopupAvatar'
 import ImagePopup from './ImagePopup'
 import CurrentUserContext from '../contexts/CurrentUserContext'
-import Api from '../utils/api'
+import { api } from '../utils/api'
 
 function App() {
-	const [isEditProfilePopup, setEditProfilePopup] = React.useState(false)
+	const [isEditProfilePopup, setIsEditProfilePopup] = React.useState(false)
 	const [isAddPlacePopup, setAddPlacePopup] = React.useState(false)
 	const [isEditAvatarPopup, setEditAvatarPopup] = React.useState(false)
 	const [selectedCard, setSelectedCard] = React.useState({})
 	const [currentUser, setCurrentUser] = React.useState({})
 	const [cards, setCards] = React.useState([])
-
-	const api = new Api({
-		baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-60',
-		headers: {
-			authorization: 'deae41f5-41fa-4007-af22-3906d8bef3ad',
-			'Content-Type': 'application/json',
-		},
-	})
 
 	React.useEffect(() => {
 		Promise.all([api.getUserInfo(), api.getInitialsCards()])
@@ -37,18 +29,39 @@ function App() {
 	}, [])
 
 	function closeAllPopups() {
-		setEditProfilePopup(false)
+		setIsEditProfilePopup(false)
 		setAddPlacePopup(false)
 		setEditAvatarPopup(false)
 		setSelectedCard({})
 	}
 
+	const isOpen = isEditAvatarPopup || isEditProfilePopup || isAddPlacePopup || selectedCard.link
+
+	React.useEffect(() => {
+		function closeByEscape(e) {
+			if (e.key === 'Escape') {
+				closeAllPopups()
+			}
+		}
+		if (isOpen) {
+			document.addEventListener('keydown', closeByEscape)
+			return () => {
+				document.removeEventListener('keydown', closeByEscape)
+			}
+		}
+	}, [isOpen])
+
 	function handleCardLike(card) {
 		const isLiked = card.likes.some((i) => i._id === currentUser._id)
 
-		api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
-			setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)))
-		})
+		api
+			.changeLikeCardStatus(card._id, isLiked)
+			.then((newCard) => {
+				setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)))
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}
 
 	function handleCardDelete(card) {
@@ -97,7 +110,7 @@ function App() {
 					<Header />
 					<Main
 						cards={cards}
-						onProfilePopup={setEditProfilePopup}
+						onProfilePopup={setIsEditProfilePopup}
 						onEditPopup={setAddPlacePopup}
 						onEditAvatarPopup={setEditAvatarPopup}
 						onCardClick={setSelectedCard}

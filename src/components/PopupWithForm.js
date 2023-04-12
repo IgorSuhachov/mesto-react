@@ -6,9 +6,7 @@ function PopupWithForm({ isOpen, onClose, name, title, children, onSubmit }) {
 				<form className="popup__form" name={`${name}-form`} onSubmit={onSubmit}>
 					<h2 className="popup__title">{title}</h2>
 					{children}
-					<button className="popup__save" onClick={onClose}>
-						{'Сохранить'}
-					</button>
+					<button className="popup__save">{'Сохранить'}</button>
 				</form>
 			</div>
 		</section>

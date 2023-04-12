@@ -1,24 +1,20 @@
 import PopupWithForm from './PopupWithForm'
 import React from 'react'
+import { useForm } from '../hooks/useForm'
 
 function PopupEdit({ isOpen, onClose, onEditPopup }) {
-	const [title, setTitle] = React.useState('')
-	const [link, setLink] = React.useState('')
+	const { values, handleChange } = useForm({
+		title: '',
+		link: '',
+	})
 
 	function handleSubmit(e) {
 		e.preventDefault()
 
 		onEditPopup({
-			title: title,
-			link: link,
+			title: values.title,
+			link: values.link,
 		})
-	}
-	function handleTitleChange(e) {
-		setTitle(e.target.value)
-	}
-
-	function handleLinkChange(e) {
-		setLink(e.target.value)
 	}
 
 	return (
@@ -32,8 +28,8 @@ function PopupEdit({ isOpen, onClose, onEditPopup }) {
 				required
 				minLength="2"
 				maxLength="30"
-				value={title}
-				onChange={handleTitleChange}
+				value={values.title}
+				onChange={handleChange}
 			/>
 			<span className="popup__error elementTitle-error" />
 			<input
@@ -43,8 +39,8 @@ function PopupEdit({ isOpen, onClose, onEditPopup }) {
 				name="link"
 				id="elementImage"
 				required
-				value={link}
-				onChange={handleLinkChange}
+				value={values.link}
+				onChange={handleChange}
 			/>
 			<span className="popup__error elementImage-error" />
 		</PopupWithForm>

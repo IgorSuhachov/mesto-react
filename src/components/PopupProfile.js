@@ -1,31 +1,28 @@
 import PopupWithForm from './PopupWithForm'
 import React from 'react'
 import CurrentUserContext from '../contexts/CurrentUserContext'
+import { useForm } from '../hooks/useForm'
 
 function PopupProfile({ isOpen, onClose, onUpdateUser }) {
 	const currentUser = React.useContext(CurrentUserContext)
-	const [name, setName] = React.useState('')
-	const [description, setDescription] = React.useState('')
+	const { values, handleChange, setValues } = useForm({
+		name: '',
+		description: '',
+	})
 
 	React.useEffect(() => {
-		setName(currentUser.name)
-		setDescription(currentUser.about)
+		setValues({
+			name: currentUser.name,
+			description: currentUser.about,
+		})
 	}, [currentUser])
 
 	function handleSubmit(e) {
 		e.preventDefault()
 		onUpdateUser({
-			name: name,
-			description: description,
+			name: values.name,
+			description: values.description,
 		})
-	}
-
-	function handleChangeName(e) {
-		setName(e.target.value)
-	}
-
-	function handleChangeDescription(e) {
-		setDescription(e.target.value)
 	}
 
 	return (
@@ -45,8 +42,8 @@ function PopupProfile({ isOpen, onClose, onUpdateUser }) {
 				required
 				minLength="2"
 				maxLength="40"
-				value={name || ''}
-				onChange={handleChangeName}
+				value={values.name || ''}
+				onChange={handleChange}
 			/>
 			<span className="popup__error profileName-error" />
 			<input
@@ -58,8 +55,8 @@ function PopupProfile({ isOpen, onClose, onUpdateUser }) {
 				required
 				minLength="2"
 				maxLength="200"
-				value={description || ''}
-				onChange={handleChangeDescription}
+				value={values.description || ''}
+				onChange={handleChange}
 			/>
 			<span className="popup__error profileDescription-error" />
 		</PopupWithForm>
