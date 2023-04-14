@@ -10,7 +10,7 @@
     Веб-сайт для загрузки фотографий
     <br/>
     <br/>
-    <a href="https://igorsuhachov.github.io/mesto/">Посмотреть сайт</a>
+    <a href="https://igorsuhachov.github.io/mesto-react/">Посмотреть сайт</a>
   </p>
 </p>
 
